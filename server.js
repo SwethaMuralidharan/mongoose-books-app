@@ -71,7 +71,7 @@ app.get('/api/books/:id', function (req, res) {
   //     break; // we found the right book, we can stop searching
   //   }
  var book_id=req.params.id;
- db.Book.findOne({_id==book_id},function(err,selectedbook)
+ db.Book.findOne({_id:book_id},function(err,selectedbook)
   {
     res.json(selectedbook);
   })
@@ -86,6 +86,10 @@ app.post('/api/books', function (req, res) {
   // newBook._id = newBookUUID++;
   // books.push(newBook);
   // res.json(newBook);
+  db.Book.create(req.body,function(err,data){
+    res.json(data);
+  })
+
 });
 
 // update book
@@ -101,6 +105,19 @@ app.put('/api/books/:id', function(req,res){
 //   var bookToUpdate = books[deleteBookIndex];
 //   books.splice(updateBookIndex, 1, req.params);
 //   res.json(req.params);
+
+ var book_id=req.params.id;
+ db.Book.findOne({ _id: book_id }, function(err, foundbook) {
+
+         (req.body.title) ? foundbook.title = req.body.title : foundbook.title ;
+         foundbook.author = req.body.author;
+         foundbook.image = req.body.image;
+         foundbook.release_date = req.body.release_date;
+
+         foundbook.save(function(err, updatedbook) {
+             res.json(updatedbook);
+         });
+     });
 });
 
 // delete book
@@ -116,6 +133,10 @@ app.delete('/api/books/:id', function (req, res) {
   // var bookToDelete = books[deleteBookIndex];
   // books.splice(deleteBookIndex, 1);
   // res.json(bookToDelete);
+  var book_id=req.params.id;
+  db.Book.findOneAndRemove({_id:book_id},function(err,deleted_item){
+    res.json(deleted_item);
+  })
 });
 
 
