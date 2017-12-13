@@ -109,10 +109,10 @@ app.put('/api/books/:id', function(req,res){
  var book_id=req.params.id;
  db.Book.findOne({ _id: book_id }, function(err, foundbook) {
 
-         (req.body.title) ? foundbook.title = req.body.title : foundbook.title ;
-         foundbook.author = req.body.author;
-         foundbook.image = req.body.image;
-         foundbook.release_date = req.body.release_date;
+        foundbook.title = (req.body.title) ? req.body.title : foundbook.title ;
+        foundbook.author = (req.body.author) ? req.body.author: foundbook.author;
+        foundbook.image = (req.body.image)? req.body.image :  foundbook.image ;
+        foundbook.release_date = (req.body.release_date) ? req.body.release_date : foundbook.release_date ;
 
          foundbook.save(function(err, updatedbook) {
              res.json(updatedbook);
